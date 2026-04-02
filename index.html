@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crypto Correlation Matrix | Degens.World</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-icon">⬡</span>
+        <div>
+          <h1>Crypto Correlation Matrix</h1>
+          <p class="tagline">Price correlation heatmap across top 20 cryptocurrencies</p>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="timeframe-btns">
+          <button class="tf-btn active" data-tf="7">7D</button>
+          <button class="tf-btn" data-tf="30">30D</button>
+          <button class="tf-btn" data-tf="90">90D</button>
+        </div>
+        <button id="refresh-btn" class="refresh-btn">↻ Refresh</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="loading" class="loading-screen">
+      <div class="spinner"></div>
+      <p>Fetching price history for top 20 coins…</p>
+      <p class="loading-sub" id="loading-sub">This may take a moment (rate-limited API)</p>
+    </div>
+
+    <div id="app" class="hidden">
+      <!-- Stats bar -->
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-label">Portfolio Diversification</div>
+          <div class="stat-value" id="div-score">—</div>
+          <div class="stat-sub" id="div-label">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Avg BTC Correlation</div>
+          <div class="stat-value" id="btc-corr">—</div>
+          <div class="stat-sub">vs. rest of top 20</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Most Correlated Pair</div>
+          <div class="stat-value small" id="max-pair">—</div>
+          <div class="stat-sub" id="max-val">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Least Correlated Pair</div>
+          <div class="stat-value small" id="min-pair">—</div>
+          <div class="stat-sub" id="min-val">—</div>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="legend-bar">
+        <span class="legend-label">Strong Negative</span>
+        <div class="legend-gradient"></div>
+        <span class="legend-label">Strong Positive</span>
+        <div class="legend-scale">
+          <span>-1.0</span><span>-0.5</span><span>0</span><span>+0.5</span><span>+1.0</span>
+        </div>
+      </div>
+
+      <!-- Matrix -->
+      <div class="matrix-wrapper">
+        <div id="matrix-container" class="matrix-container"></div>
+      </div>
+
+      <!-- Pair detail panel -->
+      <div id="pair-panel" class="pair-panel hidden">
+        <div class="pair-panel-header">
+          <h3 id="pair-title">Pair Comparison</h3>
+          <button id="close-panel" class="close-btn">✕</button>
+        </div>
+        <div class="pair-panel-body">
+          <div class="pair-stats">
+            <div class="pair-stat">
+              <div class="pair-stat-label">Correlation</div>
+              <div class="pair-stat-value" id="pair-corr-val">—</div>
+            </div>
+            <div class="pair-stat">
+              <div class="pair-stat-label">Relationship</div>
+              <div class="pair-stat-value" id="pair-rel">—</div>
+            </div>
+          </div>
+          <div class="pair-chart-wrap">
+            <canvas id="pair-chart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rankings table -->
+      <div class="rankings-section">
+        <h2>BTC Correlation Rankings</h2>
+        <p class="section-sub">Coins ranked by their price correlation with Bitcoin</p>
+        <div id="btc-rankings" class="rankings-grid"></div>
+      </div>
+
+      <div class="footer-note">
+        Data: CoinGecko Public API · Updated every 5 min · <span id="last-updated">—</span>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
